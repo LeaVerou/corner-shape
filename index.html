@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8" />
+<title>border-corner-shape</title>
+<link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+
+<h1>border-corner-shape preview</h1>
+
+<svg width="400" height="300" style="background: #eee;">
+	<path d="M 20 0 h 360 
+	         a 20 20 0 1 0 20 -20
+	          Z" fill="#f06" />
+</svg>
+
+<div id="fallback"></div>
+
+<section id="code">
+	<label>
+		border-corner-shape: 
+		<select id="border-corner-shape">
+			<option>curve</option>
+			<option>bevel</option>
+			<option>scoop</option>
+			<option>notch</option>
+		</select>
+	</label><br>
+	<label>
+		border-radius:
+		<input id="border-radius" value="20px 20% 1em 0 / 30% 1vw" />
+	</label>
+</section>
+
+<footer></footer>
+<script src="border-corner-shape.js"></script>
+
+</body>
+</html>
