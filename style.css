@@ -115,7 +115,7 @@ text {
 	position: absolute;
 	left: 5px;
 	top: 5px;
-	width: 50px;
+	width: 60px;
 	border-radius: 50%;
 	box-shadow: 2px 2px 5px rgba(0,0,0,.2);
 	-webkit-transform: rotate(-15deg);
@@ -123,4 +123,10 @@ text {
 	-ms-transform: rotate(-15deg);
 	-o-transform: rotate(-15deg);
 	transform: rotate(-15deg);
+}
+
+.github-ribbon {
+	position: absolute;
+	top: 0;
+	left: 0;
 }
