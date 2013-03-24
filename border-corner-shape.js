@@ -13,71 +13,55 @@ var svg = $('svg'),
 function update() {
 	// Apply values to fallback
 	fallback.style.borderRadius = borderRadius.value;
+	fallback.style.width = width.value;
+	fallback.style.height = height.value;
 	
 	// Make SVG
 	var cs = getComputedStyle(fallback);
 	
 	var r = [];
 	
-	// Build 2D array with corner radii
+	var w = fallback.offsetWidth,
+	    h = fallback.offsetHeight;
+	    
+	svg.setAttribute('width', w);
+	svg.setAttribute('height', h);
+	
+	// Build 2D array with corner radii, resolve % to px
 	['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft'].forEach(function(corner, i) {
 		var values = cs['border' + corner + 'Radius'].split(/\s+/);
-
+		
 		if (values.length == 1) {
 			values[1] = values[0];
 		}
 		
-		r[i] = [values[0], values[1]];
+		values[0] = parseFloat(values[0]) * (values[0].indexOf('%') > -1? w / 100 : 1);
+		values[1] = parseFloat(values[1]) * (values[1].indexOf('%') > -1? h / 100 : 1);
+		
+		r[i] = values;
 	});
 	
-	var w = +svg.getAttribute('width'),
-	    h = +svg.getAttribute('height')
 	
-	// Resolve everything to px
-	for (var i=0; i<r.length; i++) {
-	
-		for (var j=0; j<r[i].length; j++) {
-			var percentage = r[i][j].indexOf('%') > -1;
-			var value = parseFloat(r[i][j]);
-			
-			if (percentage) {
-				value = (j? h : w) * value / 100;
-			}
-			
-			r[i][j] = value;
-		}
-	}
 	
 	// Shrink overlapping curves
-	/*
-		r[0][0] + r[1][0] < w
-		r[2][0] + r[3][0] < w
-		
-		r[1][1] + r[2][1] < h
-		r[3][1] + r[0][1] < h
-	*/
-	var ratio = w / r[0][0] + r[1][0];
-	if (ratio < 1) {
-		r[0][0] *= ratio;
-		r[1][0] *= ratio;
+	var ratio = 1;
+	
+	for (var i=0; i<r.length; i++) {
+		var radii = r[i],
+			radiiAdj = r[(i + 1) % 4];
+			
+		ratio = Math.min(
+			ratio,
+			w / (radii[0] + radiiAdj[0]),
+			h / (radii[1] + radiiAdj[1])
+		);
 	}
 	
-	ratio = w / r[2][0] + r[3][0];
 	if (ratio < 1) {
-		r[2][0] *= ratio;
-		r[3][0] *= ratio;
-	}
-	
-	ratio = h / r[1][1] + r[2][1];
-	if (ratio < 1) {
-		r[1][1] *= ratio;
-		r[2][1] *= ratio;
-	}
-	
-	ratio = h / r[3][1] + r[0][1];
-	if (ratio < 1) {
-		r[3][1] *= ratio;
-		r[0][1] *= ratio;
+		for (var i=0; i<r.length; i++) {
+			r[i][0] *= ratio;
+			r[i][1] *= ratio;
+		}
 	}
 	
 	var shape = borderCornerShape.value;
@@ -130,6 +114,20 @@ function drawCorner(corner, shape, w, h, r, d) {
 	}
 }
 
-borderRadius.oninput = borderCornerShape.onchange = update;
+borderCornerShape.onchange = update;
 
-update();
+var supports = {};
+(function(){
+	var div = document.createElement('div')
+	div.style.width = '1ch';
+	supports.ch = !!div.style.width;
+})();
+
+$$('input').forEach(function(input) {
+	new Incrementable(input);
+	
+	(input.oninput = function() {
+		input.style.width = input.value.length + 'ch';
+		update();
+	})();
+});

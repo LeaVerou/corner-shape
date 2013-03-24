@@ -3,39 +3,56 @@
 <head>
 
 <meta charset="utf-8" />
-<title>border-corner-shape</title>
+<title>border-corner-shape preview &bull; Play with border-corner-shape before it’s implemented!</title>
 <link rel="stylesheet" href="style.css" />
 
 </head>
 <body>
 
-<h1>border-corner-shape preview</h1>
+<h1>
+	<code><a href="http://dev.w3.org/csswg/css4-background/#border-corner-shape" target="_blank">border-corner-shape</a></code>
+	<span>preview</span>
+</h1>
 
-<svg width="400" height="300" style="background: #eee;">
-	<path d="M 20 0 h 360 
-	         a 20 20 0 1 0 20 -20
-	          Z" fill="#f06" />
+<svg width="400" height="300" id="simulated">
+	<path />
+	<text y="50%" x="50%" dy=".3em">Simulated SVG</text>
 </svg>
 
-<div id="fallback"></div>
+<div id="fallback">
+	<svg>
+		<text y="50%" x="50%" dy=".3em">Fallback</text>
+	</svg>
+</div>
 
 <section id="code">
-	<label>
-		border-corner-shape: 
-		<select id="border-corner-shape">
-			<option>curve</option>
-			<option>bevel</option>
-			<option>scoop</option>
-			<option>notch</option>
-		</select>
-	</label><br>
-	<label>
-		border-radius:
-		<input id="border-radius" value="20px 20% 1em 0 / 30% 1vw" />
-	</label>
+	<div>
+		<label>
+			<a href="http://dev.w3.org/csswg/css4-background/#border-corner-shape" target="_blank">border-corner-shape</a>: 
+			<select id="border-corner-shape" tabindex="1">
+				<option>curve</option>
+				<option>bevel</option>
+				<option>scoop</option>
+				<option>notch</option>
+			</select></label>
+		<label>
+			<a href="http://dev.w3.org/csswg/css4-background/#border-corner-shape" target="_blank">border-radius</a>:
+			<input id="border-radius" value="10% / 30px" tabindex="1" /></label>
+		<label>
+			<a href="http://www.w3.org/TR/css3-box/#the-lsquo0">width</a>:
+			<input id="width" value="400px" pattern="\d*\.?\d+(px|r?em|ex|v(w|h|min|max)|ch|mm|cm|in|pt|pc)" tabindex="1" target="_blank" /></label>
+		<label>
+			<a href="http://www.w3.org/TR/css3-box/#the-lsquo0">height</a>:
+			<input id="height" value="300px" pattern="\d*\.?\d+(px|r?em|ex|v(w|h|min|max)|ch|mm|cm|in|pt|pc)" tabindex="1" target="_blank" /></label>
+	</div>
 </section>
 
-<footer></footer>
+<footer>Handmade by <a href="http://lea.verou.me">Lea Verou</a> with &hearts;</footer>
+
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="LeaVerou" data-count="vertical">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+<script src="incrementable.js"></script>
 <script src="border-corner-shape.js"></script>
 
 </body>
