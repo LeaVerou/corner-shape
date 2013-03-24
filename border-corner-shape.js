@@ -123,11 +123,27 @@ var supports = {};
 	supports.ch = !!div.style.width;
 })();
 
+if (!supports.ch) {
+	var test = document.createElement('span');
+	test.style.position = 'absolute';
+	test.textContent = '0';
+	
+	code.appendChild(test);
+	
+	var chEmRatio = test.offsetWidth / parseFloat(getComputedStyle(test).fontSize);
+	
+	console.log(chEmRatio, test.offsetWidth, parseFloat(getComputedStyle(test).fontSize));
+	
+	code.removeChild(test);
+	
+	
+}
+
 $$('input').forEach(function(input) {
 	new Incrementable(input);
 	
 	(input.oninput = function() {
-		input.style.width = input.value.length + 'ch';
+		input.style.width = supports.ch? input.value.length + 'ch' : input.value.length * chEmRatio + 'em';
 		update();
 	})();
 });
