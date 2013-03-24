@@ -116,34 +116,32 @@ function drawCorner(corner, shape, w, h, r, d) {
 
 borderCornerShape.onchange = update;
 
-var supports = {};
 (function(){
-	var div = document.createElement('div')
-	div.style.width = '1ch';
-	supports.ch = !!div.style.width;
+	var test = document.createElement('div')
+	test.style.width = '1ch';
+	var supportsCh = !!test.style.width;
+	
+	if (!supportsCh) {
+		test.style.position = 'absolute';
+		test.textContent = '0';
+		
+		code.appendChild(test);
+		
+		var chEmRatio = test.offsetWidth / parseFloat(getComputedStyle(test).fontSize);
+		
+		code.removeChild(test);	
+	}
+	
+	window.pxToCh = function (px) {
+		return supportsCh? px + 'ch' : px * chEmRatio + 'em';
+	};
 })();
-
-if (!supports.ch) {
-	var test = document.createElement('span');
-	test.style.position = 'absolute';
-	test.textContent = '0';
-	
-	code.appendChild(test);
-	
-	var chEmRatio = test.offsetWidth / parseFloat(getComputedStyle(test).fontSize);
-	
-	console.log(chEmRatio, test.offsetWidth, parseFloat(getComputedStyle(test).fontSize));
-	
-	code.removeChild(test);
-	
-	
-}
 
 $$('input').forEach(function(input) {
 	new Incrementable(input);
 	
 	(input.oninput = function() {
-		input.style.width = supports.ch? input.value.length + 'ch' : input.value.length * chEmRatio + 'em';
+		input.style.width = pxToCh(input.value.length);
 		update();
 	})();
 });
