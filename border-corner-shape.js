@@ -30,37 +30,52 @@ function update() {
 	// Build 2D array with corner radii, resolve % to px
 	['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft'].forEach(function(corner, i) {
 		var values = cs['border' + corner + 'Radius'].split(/\s+/);
-		
+		console.log(values);
 		if (values.length == 1) {
 			values[1] = values[0];
 		}
 		
 		values[0] = parseFloat(values[0]) * (values[0].indexOf('%') > -1? w / 100 : 1);
 		values[1] = parseFloat(values[1]) * (values[1].indexOf('%') > -1? h / 100 : 1);
+
+		if (values[0] === 0) {
+			values[1] = 0;
+		}
+		
+		if (values[1] === 0) {
+			values[0] = 0;
+		}
 		
 		r[i] = values;
 	});
 	
-	
-	
 	// Shrink overlapping curves
-	var ratio = 1;
+	var ratio = [1,1];
 	
 	for (var i=0; i<r.length; i++) {
 		var radii = r[i],
-			radiiAdj = r[(i + 1) % 4];
+			radiiAdj = r[i + (i % 2? -1 : 1)];
 			
-		ratio = Math.min(
-			ratio,
-			w / (radii[0] + radiiAdj[0]),
+		ratio[0] = Math.min(
+			ratio[0],
+			w / (radii[0] + radiiAdj[0])
+		);
+	}
+	
+	for (var i=0; i<r.length; i++) {
+		var radii = r[i],
+			radiiAdj = r[(i % 2? i+5 : i+3) % 4];
+
+		ratio[1] = Math.min(
+			ratio[1],
 			h / (radii[1] + radiiAdj[1])
 		);
 	}
 	
-	if (ratio < 1) {
+	if (ratio[0] < 1 || ratio[1] < 1) {
 		for (var i=0; i<r.length; i++) {
-			r[i][0] *= ratio;
-			r[i][1] *= ratio;
+			r[i][0] *= ratio[0];
+			r[i][1] *= ratio[1];
 		}
 	}
 	
