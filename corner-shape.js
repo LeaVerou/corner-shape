@@ -30,7 +30,7 @@ function update() {
 	// Build 2D array with corner radii, resolve % to px
 	['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft'].forEach(function(corner, i) {
 		var values = cs['border' + corner + 'Radius'].split(/\s+/);
-		console.log(values);
+
 		if (values.length == 1) {
 			values[1] = values[0];
 		}
@@ -79,7 +79,7 @@ function update() {
 		}
 	}
 	
-	var shape = borderCornerShape.value;
+	var shape = cornerShape.value;
 	
 	var d = ['M', r[0][0], '0'];
 	
@@ -129,7 +129,7 @@ function drawCorner(corner, shape, w, h, r, d) {
 	}
 }
 
-borderCornerShape.onchange = update;
+cornerShape.onchange = update;
 
 (function(){
 	var test = document.createElement('div')
